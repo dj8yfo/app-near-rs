@@ -2,7 +2,6 @@ use crate::io::ErrorKind;
 use crate::parsing::types::FunctionCallCommon;
 use crate::sign_ui;
 use crate::utils::types::capped_string::CappedString;
-use crate::utils::types::hex_display::HexDisplay;
 use crate::{
     parsing::{borsh::BorshDeserialize, HashingStream, SingleTxStream},
     AppSW,
@@ -35,18 +34,7 @@ pub fn handle(
             let mut args_str: CappedString<500> = CappedString::new();
             match args_str.deserialize_with_bytes_count(stream, args_bytes_count) {
                 Err(err) if err.kind() == ErrorKind::InvalidData => {
-                    let args_str_mut_ref = &mut args_str;
-
-                    let args_bin_mut_ref = unsafe {
-                        core::mem::transmute::<&mut CappedString<500>, &mut HexDisplay<500>>(
-                            args_str_mut_ref,
-                        )
-                    };
-                    #[cfg(feature = "speculos")]
-                    testing::debug_print(
-                        "flow with assuming `args` as binary after parsing error\n",
-                    );
-                    handle_args_bin(args_bin_mut_ref, stream, method_name, params)
+                    return Err(AppSW::TxParsingFail);
                 }
                 Ok(_) => {
                     let func_call_common =
@@ -69,30 +57,12 @@ pub fn handle(
             }
         }
         Some(_first_byte) => {
-            let mut args_bin: HexDisplay<500> = HexDisplay::new();
-            args_bin
-                .deserialize_with_bytes_count(stream, args_bytes_count)
-                .map_err(|_err| AppSW::TxParsingFail)?;
-            handle_args_bin(&mut args_bin, stream, method_name, params)
+            return Err(AppSW::TxParsingFail);
         }
         None => Err(AppSW::TxParsingFail),
     }
 }
 
-fn handle_args_bin(
-    args_bin: &mut HexDisplay<500>,
-    stream: &mut HashingStream<SingleTxStream<'_>>,
-    method_name: CappedString<50>,
-    params: ActionParams,
-) -> Result<(), AppSW> {
-    args_bin.reformat();
-    let func_call_common = FunctionCallCommon::deserialize_with_method_name(stream, method_name)
-        .map_err(|_err| AppSW::TxParsingFail)?;
-    if !sign_ui::action::ui_display_function_call_bin(&func_call_common, &args_bin, params) {
-        return Err(AppSW::Deny);
-    }
-    Ok(())
-}
 #[cfg(feature = "speculos")]
 pub fn debug_print(args_str: &CappedString<500>, func_call_common: &FunctionCallCommon) {
     func_call_common.debug_print();

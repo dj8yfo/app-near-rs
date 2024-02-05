@@ -2,7 +2,7 @@ use crate::{
     app_ui::fields_writer::FieldsWriter,
     handlers::common::action::ActionParams,
     parsing,
-    utils::types::{capped_string::CappedString, fmt_buffer::FmtBuffer, hex_display::HexDisplay},
+    utils::types::{capped_string::CappedString, fmt_buffer::FmtBuffer},
 };
 
 use ledger_device_sdk::ui::{
@@ -18,7 +18,6 @@ mod create_account;
 mod delete_account;
 mod delete_key;
 mod deploy_contract;
-mod function_call_bin;
 mod function_call_common;
 mod function_call_permission;
 mod function_call_str;
@@ -50,9 +49,8 @@ pub fn ui_display_delete_account(
     params: ActionParams,
 ) -> bool {
     let mut writer: FieldsWriter<'_, 3> = FieldsWriter::new();
-    let mut field_context: delete_account::FieldsContext = delete_account::FieldsContext::new();
 
-    delete_account::format(delete_account, &mut field_context, &mut writer);
+    delete_account::format(delete_account, &mut writer);
 
     ui_display_common(&mut writer, params)
 }
@@ -131,29 +129,11 @@ pub fn ui_display_function_call_str(
         function_call_common::FieldsContext::new();
 
     function_call_common::format(func_call_common, &mut common_field_context, &mut writer);
-    let mut args_field_context: function_call_str::FieldsContext =
-        function_call_str::FieldsContext::new();
-    function_call_str::format(args, &mut args_field_context, &mut writer);
+    function_call_str::format(args, &mut writer);
 
     ui_display_common(&mut writer, params)
 }
 
-pub fn ui_display_function_call_bin(
-    func_call_common: &parsing::types::FunctionCallCommon,
-    args: &HexDisplay<500>,
-    params: ActionParams,
-) -> bool {
-    let mut writer: FieldsWriter<'_, 7> = FieldsWriter::new();
-    let mut common_field_context: function_call_common::FieldsContext =
-        function_call_common::FieldsContext::new();
-
-    function_call_common::format(func_call_common, &mut common_field_context, &mut writer);
-    let mut args_field_context: function_call_bin::FieldsContext =
-        function_call_bin::FieldsContext::new();
-    function_call_bin::format(args, &mut args_field_context, &mut writer);
-
-    ui_display_common(&mut writer, params)
-}
 pub fn ui_display_common<const N: usize>(
     writer: &mut FieldsWriter<'_, N>,
     params: ActionParams,

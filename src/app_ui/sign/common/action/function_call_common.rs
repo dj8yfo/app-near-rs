@@ -8,7 +8,6 @@ use numtoa::NumToA;
 use crate::app_ui::fields_writer::FieldsWriter;
 
 pub struct FieldsContext {
-    pub method_name_display_buf: [u8; 20],
     pub gas_buf: [u8; 20],
     pub float_buffer: dtoa::Buffer,
 }
@@ -16,7 +15,6 @@ pub struct FieldsContext {
 impl FieldsContext {
     pub fn new() -> Self {
         Self {
-            method_name_display_buf: [0u8; 20],
             gas_buf: [0u8; 20],
             float_buffer: dtoa::Buffer::new(),
         }
@@ -34,9 +32,7 @@ pub fn format<'b, 'a: 'b, const N: usize>(
         }))
         .unwrap();
 
-    let method_name = func_call_common
-        .method_name
-        .ui_fields("Method Name", &mut field_context.method_name_display_buf);
+    let method_name = func_call_common.method_name.ui_fields("Method Name");
 
     writer.push_fields(method_name).unwrap();
 

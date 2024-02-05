@@ -9,8 +9,6 @@ use numtoa::NumToA;
 
 pub struct FieldsContext {
     pub num_buf: [u8; 10],
-    pub receiver_display_buf: [u8; 20],
-    pub method_names_display_buf: [u8; 20],
     pub allowance_str: FmtBuffer<30>,
 }
 
@@ -18,8 +16,6 @@ impl FieldsContext {
     pub fn new() -> Self {
         Self {
             num_buf: [0u8; 10],
-            receiver_display_buf: [0u8; 20],
-            method_names_display_buf: [0u8; 20],
             allowance_str: FmtBuffer::new(),
         }
     }
@@ -49,9 +45,7 @@ pub fn format<'b, 'a: 'b>(
         }))
         .unwrap();
 
-    let recevier_id = function_call_perm
-        .receiver_id
-        .ui_fields("FnCall Receiver", &mut field_context.receiver_display_buf);
+    let recevier_id = function_call_perm.receiver_id.ui_fields("FnCall Receiver");
 
     writer.push_fields(recevier_id).unwrap();
 
@@ -64,9 +58,7 @@ pub fn format<'b, 'a: 'b>(
         }))
         .unwrap();
 
-    let methods_names_fields = function_call_perm
-        .method_names
-        .ui_fields("Method Names", &mut field_context.method_names_display_buf);
+    let methods_names_fields = function_call_perm.method_names.ui_fields("Method Names");
 
     writer.push_fields(methods_names_fields).unwrap();
 }

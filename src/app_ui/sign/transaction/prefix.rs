@@ -9,16 +9,12 @@ use crate::{
 };
 
 struct FieldsContext {
-    display_buf1: [u8; 20],
-    display_buf2: [u8; 20],
     numtoa_buf: [u8; 10],
 }
 
 impl FieldsContext {
     pub fn new() -> Self {
         Self {
-            display_buf1: [0u8; 20],
-            display_buf2: [0u8; 20],
             numtoa_buf: [0u8; 10],
         }
     }
@@ -29,14 +25,10 @@ fn format<'b, 'a: 'b>(
     field_context: &'a mut FieldsContext,
     writer: &'_ mut FieldsWriter<'b, 5>,
 ) {
-    let signer_id = prefix
-        .signer_id
-        .ui_fields("Signer Id", &mut field_context.display_buf1);
+    let signer_id = prefix.signer_id.ui_fields("Signer Id");
     writer.push_fields(signer_id).unwrap();
 
-    let receiver_id = prefix
-        .receiver_id
-        .ui_fields("Receiver Id", &mut field_context.display_buf2);
+    let receiver_id = prefix.receiver_id.ui_fields("Receiver Id");
     writer.push_fields(receiver_id).unwrap();
 
     let num_actions_str = prefix
