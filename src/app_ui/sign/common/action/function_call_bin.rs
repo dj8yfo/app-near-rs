@@ -1,6 +1,6 @@
 use crate::app_ui::fields_writer::FieldsWriter;
+use crate::parsing::types::common::action::function_call::ArgsBinaryRepresentation;
 use crate::utils::types::elipsis_fields::ElipsisFields;
-use crate::utils::types::hex_display::HexDisplay;
 
 pub struct FieldsContext {
     pub args_display_buf: [u8; 20],
@@ -14,7 +14,7 @@ impl FieldsContext {
     }
 }
 pub fn format<'b, 'a: 'b>(
-    args: &'b HexDisplay<200>,
+    args: &'b ArgsBinaryRepresentation,
     field_context: &'a mut FieldsContext,
     writer: &'_ mut FieldsWriter<'b, 7>,
 ) {

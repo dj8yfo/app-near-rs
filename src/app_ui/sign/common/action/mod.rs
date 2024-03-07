@@ -1,8 +1,7 @@
 use crate::{
     app_ui::fields_writer::FieldsWriter,
     handlers::common::action::ActionParams,
-    parsing,
-    utils::types::{capped_string::CappedString, hex_display::HexDisplay},
+    parsing::{self, types::common::action::function_call::{ArgsBinaryRepresentation, ArgsStringRepresentation}},
 };
 use fmt_buffer::Buffer;
 
@@ -124,7 +123,7 @@ pub fn ui_display_deploy_contract(
 
 pub fn ui_display_function_call_str(
     func_call_common: &parsing::types::FunctionCallCommon,
-    args: &CappedString<200>,
+    args: &ArgsStringRepresentation,
     params: ActionParams,
 ) -> bool {
     let mut writer: FieldsWriter<'_, 7> = FieldsWriter::new();
@@ -141,7 +140,7 @@ pub fn ui_display_function_call_str(
 
 pub fn ui_display_function_call_bin(
     func_call_common: &parsing::types::FunctionCallCommon,
-    args: &HexDisplay<200>,
+    args: &ArgsBinaryRepresentation,
     params: ActionParams,
 ) -> bool {
     let mut writer: FieldsWriter<'_, 7> = FieldsWriter::new();
