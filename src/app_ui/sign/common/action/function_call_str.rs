@@ -1,4 +1,4 @@
-use crate::utils::types::capped_string::CappedString;
+use crate::parsing::types::common::action::function_call::ArgsStringRepresentation;
 
 use crate::app_ui::fields_writer::FieldsWriter;
 use crate::utils::types::elipsis_fields::ElipsisFields;
@@ -15,7 +15,7 @@ impl FieldsContext {
     }
 }
 pub fn format<'b, 'a: 'b>(
-    args: &'b CappedString<200>,
+    args: &'b ArgsStringRepresentation,
     field_context: &'a mut FieldsContext,
     writer: &'_ mut FieldsWriter<'b, 7>,
 ) {

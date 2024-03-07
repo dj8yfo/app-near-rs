@@ -1,7 +1,4 @@
-use crate::{
-    parsing::{self},
-    utils::types::elipsis_fields::ElipsisFields,
-};
+use crate::{parsing, utils::types::elipsis_fields::ElipsisFields};
 use fmt_buffer::Buffer;
 use ledger_device_sdk::ui::gadgets::Field;
 

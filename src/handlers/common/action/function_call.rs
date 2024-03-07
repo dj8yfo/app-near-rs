@@ -1,3 +1,6 @@
+use crate::parsing::types::common::action::function_call::{
+    ArgsBinaryRepresentation, ArgsStringRepresentation,
+};
 use crate::parsing::types::FunctionCallCommon;
 use crate::sign_ui;
 use crate::utils::types::capped_string::CappedString;
@@ -31,11 +34,13 @@ pub fn handle(
     {
         // '{' char
         Some(123) => {
-            let mut args_str: CappedString<200> = CappedString::new();
+            let mut args_str: ArgsStringRepresentation = CappedString::new();
             match args_str.deserialize_with_bytes_count(stream, args_bytes_count) {
                 Err(err) if err.kind() == ErrorKind::InvalidData => {
-                    let mut args_bin: HexDisplay<200> = unsafe {
-                        core::mem::transmute::<CappedString<200>, HexDisplay<200>>(args_str)
+                    let mut args_bin: ArgsBinaryRepresentation = unsafe {
+                        core::mem::transmute::<ArgsStringRepresentation, ArgsBinaryRepresentation>(
+                            args_str,
+                        )
                     };
                     args_bin.reformat();
                     ArgsRepr::BinHex(args_bin)
@@ -47,7 +52,7 @@ pub fn handle(
             }
         }
         Some(_first_byte) => {
-            let mut args_bin: HexDisplay<200> = HexDisplay::new();
+            let mut args_bin: ArgsBinaryRepresentation = HexDisplay::new();
             args_bin
                 .deserialize_with_bytes_count(stream, args_bytes_count)
                 .map_err(|_err| AppSW::TxParsingFail)?;
@@ -85,6 +90,6 @@ fn handle_common(
 }
 
 enum ArgsRepr {
-    String(CappedString<200>),
-    BinHex(HexDisplay<200>),
+    String(ArgsStringRepresentation),
+    BinHex(ArgsBinaryRepresentation),
 }
