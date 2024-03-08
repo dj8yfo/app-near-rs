@@ -44,6 +44,7 @@ fn format<'b, 'a: 'b>(
     writer.push_fields(receiver_id);
 
     let num_actions_str = prefix
+        // numtoa_buf has to be at least 10 bytes for u32 (4 bytes) : ok
         .number_of_actions
         .numtoa_str(10, &mut field_context.numtoa_buf);
     writer.push_fields(ElipsisFields::one(Field {

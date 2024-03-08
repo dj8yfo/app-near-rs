@@ -53,6 +53,7 @@ pub fn format<'b, 'a: 'b>(
         name: "Total FnCall Methods",
         value: function_call_perm
             .number_of_method_names
+            // numtoa_buf has to be at least 10 bytes for u32 (4 bytes) : ok
             .numtoa_str(10, &mut field_context.num_buf),
     }));
 

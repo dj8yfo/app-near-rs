@@ -44,6 +44,7 @@ pub fn format<'b, 'a: 'b, const N: usize>(
         value: add_key
             .access_key
             .nonce
+            // numtoa_buf has to be at least 20 bytes for u64 (8 bytes) : ok
             .numtoa_str(10, &mut field_context.num_buf),
     }));
 

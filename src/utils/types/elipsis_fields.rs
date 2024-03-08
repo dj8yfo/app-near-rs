@@ -30,6 +30,7 @@ impl<'a> ElipsisFields<'a> {
             let elipsis_descr = strcat::concatenate(
                 &[
                     "... ",
+                    // numtoa_buf has to be at least 10 bytes for usize/u32(4 bytes) : ok
                     source.leftover().numtoa_str(10, &mut numtoa_buf),
                     " bytes",
                 ],
@@ -65,7 +66,7 @@ impl<'a> ElipsisFields<'a> {
             let elipsis_descr = concatenate(
                 &[
                     "... ",
-                    // numtoa_buf has to be at least 10 bytes for usize (4 bytes) : ok
+                    // numtoa_buf has to be at least 10 bytes for usize/u32(4 bytes) : ok
                     source.leftover().numtoa_str(10, &mut numtoa_buf),
                     " bytes",
                 ],
@@ -101,6 +102,7 @@ impl<'a> ElipsisFields<'a> {
             let elipsis_descr = strcat::concatenate(
                 &[
                     "... ",
+                    // numtoa_buf has to be at least 10 bytes for usize/u32(4 bytes) : ok
                     source.leftover().numtoa_str(10, &mut numtoa_buf),
                     " bytes",
                 ],

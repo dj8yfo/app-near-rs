@@ -32,6 +32,7 @@ fn format<'b, 'a: 'b>(
 ) {
     writer.push_fields(ElipsisFields::one(Field {
         name: "Nonce",
+        // numtoa_buf has to be at least 20 bytes for u64 (8 bytes) : ok
         value: suffix.nonce.numtoa_str(10, &mut field_context.num_buf1),
     }));
 
@@ -39,6 +40,7 @@ fn format<'b, 'a: 'b>(
         name: "Max Block Height",
         value: suffix
             .max_block_height
+            // numtoa_buf has to be at least 20 bytes for u64 (8 bytes) : ok
             .numtoa_str(10, &mut field_context.num_buf2),
     }));
 
