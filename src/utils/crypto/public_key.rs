@@ -55,8 +55,10 @@ impl PublicKeyBe {
     }
 
     pub fn display_str_hex<'b>(&self, buffer: &'b mut [u8; 64]) -> &'b str {
+        // .unwrap() is ok, as `64 == 32 * 2` holds true
         hex::encode_to_slice(self.0, buffer).unwrap();
 
+        // .unwrap() is ok, as buffer contains only bytes, encoding hex chars
         core::str::from_utf8(buffer).unwrap()
     }
 }

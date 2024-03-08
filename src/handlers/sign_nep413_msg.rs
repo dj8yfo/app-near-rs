@@ -16,6 +16,7 @@ pub fn handler(mut stream: SingleTxStream<'_>) -> Result<Signature, AppSW> {
 
     let mut stream = HashingStream::new(stream)?;
 
+    // .unwrap() is ok because 413 is expected to be within valid range
     let msg_discriminant = MessageDiscriminant::new_off_chain(413).unwrap();
 
     let prefix_bytes = msg_discriminant.borsh_serialize();

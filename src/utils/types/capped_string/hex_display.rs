@@ -43,6 +43,7 @@ impl<const N: usize> HexDisplay<N> {
         self.leftover
     }
 
+    /// this method must only be called once
     pub fn reformat(&mut self) {
         let prev_used = self.used;
         let mut new_used = self.used * 2;
@@ -61,11 +62,17 @@ impl<const N: usize> HexDisplay<N> {
         for ind in (0..self.used).rev() {
             let char_range = ind * 2..=ind * 2 + 1;
             tmp_buffer.copy_from_slice(&self.buffer[ind..ind + 1]);
+            // .unwrap() is ok, as `2 == 1 * 2` holds true
             hex::encode_to_slice(tmp_buffer, &mut self.buffer[char_range]).unwrap();
         }
     }
 
+    /// # Panics
+    ///
+    /// this method should be only called after `reformat` is called;
+    /// otherwise it may panic with out of slice bounds access
     pub fn as_str(&self) -> &str {
+        // .unwrap() is ok, as buffer contains only bytes, encoding hex chars
         core::str::from_utf8(&self.buffer[..self.used * 2]).unwrap()
     }
 }

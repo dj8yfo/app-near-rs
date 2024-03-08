@@ -26,6 +26,10 @@ impl<const N: usize> CappedString<N> {
     }
 
     pub fn as_str(&self) -> &str {
+        // .unwrap() is ok because it's either based on complete deserialized `str`
+        // based on previous validation by `core::str::from_utf8`,
+        // or `self.used` index is equal to value of [`Utf8Error::valid_up_to()`](https://doc.rust-lang.org/std/str/struct.Utf8Error.html#method.valid_up_to)
+        // or it's equal to 0 after `CappedString::new()` was called
         core::str::from_utf8(&self.buffer[..self.used]).unwrap()
     }
 

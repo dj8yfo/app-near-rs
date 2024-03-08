@@ -24,6 +24,7 @@ pub fn handler(mut stream: SingleTxStream<'_>) -> Result<Signature, AppSW> {
 
     let mut stream = HashingStream::new(stream)?;
 
+    // .unwrap() is ok because 366 is expected to be within valid range (asymptoticaly almost surely)
     let msg_discriminant = MessageDiscriminant::new_on_chain(NEP_366_META_TRANSACTIONS).unwrap();
 
     let prefix_bytes = msg_discriminant.borsh_serialize();

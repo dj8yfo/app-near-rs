@@ -35,7 +35,7 @@ impl<'a> ElipsisFields<'a> {
                 ],
                 display_buf,
             )
-            .unwrap(); // Fails if buffer.display_buf is too small
+            .unwrap(); // .unwrap() is ok because display_buf.len(): 20 >= 20
             ElipsisFields::Two([
                 Field {
                     name: title,
@@ -65,12 +65,13 @@ impl<'a> ElipsisFields<'a> {
             let elipsis_descr = concatenate(
                 &[
                     "... ",
+                    // numtoa_buf has to be at least 10 bytes for usize (4 bytes) : ok
                     source.leftover().numtoa_str(10, &mut numtoa_buf),
                     " bytes",
                 ],
                 display_buf,
             )
-            .unwrap(); // Fails if source.display_buf is too small
+            .unwrap(); // .unwrap() is ok because display_buf.len(): 20 >= 20
             ElipsisFields::Two([
                 Field {
                     name: title,
@@ -105,7 +106,7 @@ impl<'a> ElipsisFields<'a> {
                 ],
                 display_buf,
             )
-            .unwrap(); // Fails if source.display_buf is too small
+            .unwrap(); // .unwrap() is ok because display_buf.len(): 20 >= 20
             ElipsisFields::Two([
                 Field {
                     name: title,

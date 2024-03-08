@@ -18,13 +18,14 @@ impl<const N: usize> Buffer<N> {
 
     pub fn as_str(&self) -> &str {
         debug_assert!(self.used <= self.buffer.len());
+        // .unwrap() is ok, as only bytes, comprising a sequence of valid utf8 chars
+        // are going to be written to `self.buffer` on `self.write_str` calls
         core::str::from_utf8(&self.buffer[..self.used]).unwrap()
     }
 
     pub fn truncated(&self) -> bool {
         self.truncated
     }
-
 
     pub fn leftover(&self) -> usize {
         self.leftover

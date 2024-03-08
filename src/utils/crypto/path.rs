@@ -17,6 +17,8 @@ impl PathBip32 {
         }
 
         for (i, chunk) in data.chunks(mem::size_of::<u32>()).enumerate() {
+            // .unwrap() is ok, as `chunk.len() == 4` holds true
+            // https://doc.rust-lang.org/std/primitive.array.html#impl-TryFrom%3C%26%5BT%5D%3E-for-%5BT;+N%5D
             result.0[i] = u32::from_be_bytes(chunk.try_into().unwrap());
         }
 
