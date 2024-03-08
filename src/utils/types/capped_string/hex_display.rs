@@ -1,8 +1,9 @@
 use borsh::io::{Read, Result};
 use borsh::BorshDeserialize;
 
-use super::capped_string::CappedString;
-use super::strcat::read_leftover;
+use super::CappedString;
+
+use crate::utils::types::strcat::read_leftover;
 
 impl<const N: usize> From<CappedString<N>> for HexDisplay<N> {
     fn from(value: CappedString<N>) -> Self {
@@ -18,10 +19,10 @@ impl<const N: usize> From<CappedString<N>> for HexDisplay<N> {
 /// A type with first stores a byte buffer into its internal buffer;
 /// and then reuses it to display string hex representation of buffer/2 bytes
 pub struct HexDisplay<const N: usize> {
-    pub buffer: [u8; N],
-    pub used: usize,
-    pub truncated: bool,
-    pub leftover: usize,
+    buffer: [u8; N],
+    used: usize,
+    truncated: bool,
+    leftover: usize,
 }
 
 impl<const N: usize> HexDisplay<N> {
@@ -34,9 +35,12 @@ impl<const N: usize> HexDisplay<N> {
         }
     }
 
-    #[allow(unused)]
     pub fn truncated(&self) -> bool {
         self.truncated
+    }
+
+    pub fn leftover(&self) -> usize {
+        self.leftover
     }
 
     pub fn reformat(&mut self) {

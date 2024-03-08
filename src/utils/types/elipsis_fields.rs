@@ -30,7 +30,7 @@ impl<'a> ElipsisFields<'a> {
             let elipsis_descr = strcat::concatenate(
                 &[
                     "... ",
-                    source.leftover.numtoa_str(10, &mut numtoa_buf),
+                    source.leftover().numtoa_str(10, &mut numtoa_buf),
                     " bytes",
                 ],
                 display_buf,
@@ -65,7 +65,7 @@ impl<'a> ElipsisFields<'a> {
             let elipsis_descr = concatenate(
                 &[
                     "... ",
-                    source.leftover.numtoa_str(10, &mut numtoa_buf),
+                    source.leftover().numtoa_str(10, &mut numtoa_buf),
                     " bytes",
                 ],
                 display_buf,
@@ -100,7 +100,7 @@ impl<'a> ElipsisFields<'a> {
             let elipsis_descr = strcat::concatenate(
                 &[
                     "... ",
-                    source.leftover.numtoa_str(10, &mut numtoa_buf),
+                    source.leftover().numtoa_str(10, &mut numtoa_buf),
                     " bytes",
                 ],
                 display_buf,

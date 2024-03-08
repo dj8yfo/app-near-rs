@@ -3,7 +3,7 @@ pub struct Buffer<const N: usize> {
     buffer: [u8; N],
     used: usize,
     truncated: bool,
-    pub leftover: usize,
+    leftover: usize,
 }
 
 impl<const N: usize> Buffer<N> {
@@ -21,9 +21,13 @@ impl<const N: usize> Buffer<N> {
         core::str::from_utf8(&self.buffer[..self.used]).unwrap()
     }
 
-    #[allow(unused)]
     pub fn truncated(&self) -> bool {
         self.truncated
+    }
+
+
+    pub fn leftover(&self) -> usize {
+        self.leftover
     }
 }
 
