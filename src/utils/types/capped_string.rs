@@ -22,7 +22,7 @@ impl<const N: usize> CappedString<N> {
     }
 
     pub fn as_str(&self) -> &str {
-        unsafe { core::str::from_utf8_unchecked(&self.buffer[..self.used]) }
+        core::str::from_utf8(&self.buffer[..self.used]).unwrap()
     }
 
     #[allow(unused)]
