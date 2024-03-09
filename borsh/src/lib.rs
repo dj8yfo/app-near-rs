@@ -32,12 +32,6 @@ pub trait BorshDeserialize: Sized {
             _ => Err(Error::from(ErrorKind::InvalidData)),
         }
     }
-
-    #[doc(hidden)]
-    fn array_from_reader<R: Read, const N: usize>(reader: &mut R) -> Result<Option<[Self; N]>> {
-        let _ = reader;
-        Ok(None)
-    }
 }
 
 fn unexpected_eof_to_unexpected_length_of_input(e: Error) -> Error {
@@ -56,15 +50,6 @@ impl BorshDeserialize for u8 {
             .read_exact(&mut buf)
             .map_err(unexpected_eof_to_unexpected_length_of_input)?;
         Ok(buf[0])
-    }
-
-    #[doc(hidden)]
-    fn array_from_reader<R: Read, const N: usize>(reader: &mut R) -> Result<Option<[Self; N]>> {
-        let mut arr = [0u8; N];
-        reader
-            .read_exact(&mut arr)
-            .map_err(unexpected_eof_to_unexpected_length_of_input)?;
-        Ok(Some(arr))
     }
 }
 
@@ -101,19 +86,14 @@ impl BorshDeserialize for u128 {
     }
 }
 
-impl<T, const N: usize> BorshDeserialize for [T; N]
-where
-    T: BorshDeserialize,
-{
-    /// this implementation is borrowed from https://github.com/near/borsh-rs/blob/master/borsh/src/de/mod.rs;
-    /// the branch with `unsafe` code, unused in this app, is stubbed with unimplemented!("...")
+impl<const N: usize> BorshDeserialize for [u8; N] {
     #[inline]
     fn deserialize_reader<R: Read>(reader: &mut R) -> Result<Self> {
-        if let Some(arr) = T::array_from_reader(reader)? {
-            Ok(arr)
-        } else {
-            unimplemented!("array for [T; N], where T::array_from_reader is not implemented");
-        }
+        let mut arr = [0u8; N];
+        reader
+            .read_exact(&mut arr)
+            .map_err(unexpected_eof_to_unexpected_length_of_input)?;
+        Ok(arr)
     }
 }
 
