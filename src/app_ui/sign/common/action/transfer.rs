@@ -33,8 +33,8 @@ pub fn format<'b, 'a: 'b>(
         .deposit
         .display_as_buffer(&mut field_context.amount_buffer);
 
-    writer.push_fields(ElipsisFields::One([Field {
+    writer.push_fields(ElipsisFields::one(Field {
         name: "Amount",
         value: field_context.amount_buffer.as_str(),
-    }]));
+    }));
 }

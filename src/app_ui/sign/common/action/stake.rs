@@ -38,10 +38,10 @@ pub fn format<'b, 'a: 'b>(
     stake
         .stake
         .display_as_buffer(&mut field_context.stake_buffer);
-    writer.push_fields(ElipsisFields::One([Field {
+    writer.push_fields(ElipsisFields::one(Field {
         name: "Stake",
         value: field_context.stake_buffer.as_str(),
-    }]));
+    }));
 
     writer.push_fields(ElipsisFields::one(Field {
         name: "Public Key",

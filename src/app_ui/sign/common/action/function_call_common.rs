@@ -51,8 +51,8 @@ pub fn format<'b, 'a: 'b, const N: usize>(
     func_call_common
         .deposit
         .display_as_buffer(&mut field_context.deposit_buffer);
-    writer.push_fields(ElipsisFields::One([Field {
+    writer.push_fields(ElipsisFields::one(Field {
         name: "Deposit",
         value: field_context.deposit_buffer.as_str(),
-    }]));
+    }));
 }
