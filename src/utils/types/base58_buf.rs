@@ -11,11 +11,11 @@ impl<const N: usize> Base58Buf<N> {
         }
     }
 
-    pub fn encode(&mut self, target: &[u8]) -> Result<(), bs58::encode::Error> {
+    pub fn encode(&mut self, input: &[u8]) -> Result<(), bs58::encode::Error> {
         self.len = 0;
 
         // expecting `bs58` to always produce correct strings
-        let len = bs58::encode(target).onto(&mut self.buf[..])?;
+        let len = bs58::encode(input).onto(&mut self.buf[..])?;
 
         self.len = len;
         Ok(())
