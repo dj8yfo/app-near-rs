@@ -1,9 +1,9 @@
 use borsh::io::{Read, Result};
 use borsh::BorshDeserialize;
 
-use super::CappedString;
-
 use crate::utils::types::strcat::read_leftover;
+
+use super::capped_string::CappedString;
 
 impl<const N: usize> From<CappedString<N>> for HexDisplay<N> {
     fn from(value: CappedString<N>) -> Self {

@@ -3,16 +3,12 @@ use borsh::BorshDeserialize;
 
 use super::strcat::read_leftover;
 
-/// this needs to be made submodule to access private
-/// `CappedString` fields
-pub mod hex_display;
-
 #[derive(Clone)]
 pub struct CappedString<const N: usize> {
-    buffer: [u8; N],
-    used: usize,
-    truncated: bool,
-    leftover: usize,
+    pub(in crate::utils::types) buffer: [u8; N],
+    pub(in crate::utils::types) used: usize,
+    pub(in crate::utils::types) truncated: bool,
+    pub(in crate::utils::types) leftover: usize,
 }
 
 impl<const N: usize> CappedString<N> {
