@@ -1,6 +1,6 @@
 use ledger_device_sdk::ui::{
     bitmaps::{CROSSMARK, EYE, VALIDATE_14},
-    gadgets::{Field, MultiFieldReview},
+    gadgets::{DisplayError, Field, MultiFieldReview},
 };
 
 use crate::{
@@ -66,7 +66,7 @@ fn format<'b, 'a: 'b>(
         writer.push_fields(callback_url_fields);
     }
 }
-pub fn ui_display(payload: &mut Payload) -> bool {
+pub fn ui_display(payload: &mut Payload) -> Result<bool, DisplayError> {
     let mut field_writer: FieldsWriter<'_, 7> = FieldsWriter::new();
     let mut field_context: FieldsContext = FieldsContext::new();
     format(payload, &mut field_context, &mut field_writer);

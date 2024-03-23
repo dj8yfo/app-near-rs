@@ -1,5 +1,6 @@
 use crate::parsing::types::AddKey;
 use crate::parsing::types::{AccessKeyPermission, FunctionCallPermission};
+use crate::sign_ui::widgets::check_display_error;
 use crate::{parsing, sign_ui};
 use crate::{
     parsing::{HashingStream, SingleTxStream},
@@ -18,7 +19,9 @@ pub fn handle(
     match add_key_common.access_key.permission {
         AccessKeyPermission::FunctionCall => handle_function_call(&add_key_common, stream, params),
         AccessKeyPermission::FullAccess => {
-            if !sign_ui::action::ui_display_add_key_fullaccess(&add_key_common, params) {
+            if !sign_ui::action::ui_display_add_key_fullaccess(&add_key_common, params)
+                .map_err(check_display_error)?
+            {
                 return Err(AppSW::Deny);
             }
             Ok(())
@@ -40,7 +43,9 @@ pub fn handle_function_call(
         add_key_common,
         &mut function_call_perm,
         params,
-    ) {
+    )
+    .map_err(check_display_error)?
+    {
         return Err(AppSW::Deny);
     }
     Ok(())

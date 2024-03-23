@@ -14,11 +14,13 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  *****************************************************************************/
-use ledger_device_sdk::ui::bitmaps::WARNING;
+use ledger_device_sdk::ui::bitmaps::{CROSSMARK, EYE, VALIDATE_14, WARNING};
 
-use ledger_device_sdk::ui::gadgets::clear_screen;
+use ledger_device_sdk::ui::gadgets::{clear_screen, DisplayError, Field, MultiFieldReview};
 use ledger_device_sdk::ui::layout::{Layout, Location, StringPlace};
 use ledger_device_sdk::ui::screen_util::screen_update;
+
+use crate::AppSW;
 
 pub fn display_receiving() {
     clear_screen();
@@ -50,4 +52,26 @@ pub fn delegate_error_screen() {
     }
 
     screen_update();
+}
+
+pub fn check_display_error(input: DisplayError) -> AppSW {
+    match input {
+        DisplayError::NonASCIIChars => {
+            let my_review = MultiFieldReview::new(
+                &[Field {
+                    name: "Reason",
+                    value: "Payload cannot be displayed as it contains characters outside of ASCII range",
+                }],
+                &["Invalid Payload!"],
+                Some(&EYE),
+                "Error!",
+                Some(&VALIDATE_14),
+                "Error!",
+                Some(&CROSSMARK),
+            );
+
+            let _r = my_review.show().unwrap();
+            AppSW::NonASCIIChars
+        }
+    }
 }

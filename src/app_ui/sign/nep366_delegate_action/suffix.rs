@@ -1,6 +1,6 @@
 use ledger_device_sdk::ui::{
     bitmaps::{CROSSMARK, EYE, VALIDATE_14},
-    gadgets::{Field, MultiFieldReview},
+    gadgets::{DisplayError, Field, MultiFieldReview},
 };
 use numtoa::NumToA;
 
@@ -53,7 +53,9 @@ fn format<'b, 'a: 'b>(
     }));
 }
 
-pub fn ui_display(suffix: &parsing::types::nep366_delegate_action::suffix::Suffix) -> bool {
+pub fn ui_display(
+    suffix: &parsing::types::nep366_delegate_action::suffix::Suffix,
+) -> Result<bool, DisplayError> {
     let mut field_writer: FieldsWriter<'_, 3> = FieldsWriter::new();
     let mut field_context: FieldsContext = FieldsContext::new();
     format(suffix, &mut field_context, &mut field_writer);

@@ -21,6 +21,8 @@ use fmt_buffer::Buffer;
 use ledger_device_sdk::ui::bitmaps::{CROSSMARK, EYE, VALIDATE_14};
 use ledger_device_sdk::ui::gadgets::{Field, MultiFieldReview};
 
+use super::sign::widgets::check_display_error;
+
 pub fn ui_display_pk_base58(public_key: &crypto::PublicKeyBe) -> Result<bool, AppSW> {
     let mut out_buf = Buffer::<60>::new();
     public_key.display_str_base58(&mut out_buf)?;
@@ -40,7 +42,7 @@ pub fn ui_display_pk_base58(public_key: &crypto::PublicKeyBe) -> Result<bool, Ap
         Some(&CROSSMARK),
     );
 
-    Ok(my_review.show())
+    Ok(my_review.show().map_err(check_display_error)?)
 }
 
 pub fn ui_display_hex(public_key: &crypto::PublicKeyBe) -> Result<bool, AppSW> {
@@ -61,5 +63,5 @@ pub fn ui_display_hex(public_key: &crypto::PublicKeyBe) -> Result<bool, AppSW> {
         Some(&CROSSMARK),
     );
 
-    Ok(my_review.show())
+    Ok(my_review.show().map_err(check_display_error)?)
 }

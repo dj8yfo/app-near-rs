@@ -1,6 +1,7 @@
 use crate::parsing::types::common::message_discriminant::NEP_413_SIGN_MESSAGE;
 use crate::parsing::types::nep413::payload::Payload;
 use crate::sign_ui;
+use crate::sign_ui::widgets::check_display_error;
 use crate::{
     parsing::{types::MessageDiscriminant, HashingStream, SingleTxStream},
     utils::crypto,
@@ -31,7 +32,7 @@ pub fn handler(mut stream: SingleTxStream<'_>) -> Result<Signature, AppSW> {
         .deserialize_reader_in_place(&mut stream)
         .map_err(|_err| AppSW::TxParsingFail)?;
 
-    if !sign_ui::nep413::payload::ui_display(&mut payload) {
+    if !sign_ui::nep413::payload::ui_display(&mut payload).map_err(check_display_error)? {
         return Err(AppSW::Deny);
     }
 

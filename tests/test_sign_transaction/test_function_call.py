@@ -1,11 +1,13 @@
 from application_client.client import (
     AsyncAPDU,
     SW_OK,
+    ERR_NON_ASCII_CHARS,
     NavigableConditions,
     Nearbackend,
     generic_test_sign,
 )
 from ragger.backend.interface import RAPDU
+from ragger.backend import RaisePolicy
 from ragger.navigator import Navigator
 
 
@@ -231,6 +233,7 @@ def test_sign_function_call_string_with_multibyte_utf8(firmware, backend, naviga
         ],
     }
     """
+    backend.raise_policy = RaisePolicy.RAISE_NOTHING
     client = Nearbackend(backend)
     chunks = [
         AsyncAPDU(
@@ -253,14 +256,11 @@ def test_sign_function_call_string_with_multibyte_utf8(firmware, backend, naviga
                 "80028057d5f09f9d9932c2a933e0ac9434f09f9d9932c2a933e0ac9434f09f9d9932c2a933e0ac9434f09f9d9932c2a933e0ac9434f09f9d9932c2a933e0ac9434f09f9d9932c2a933e0ac9434f09f9d9932c2a933e0ac9434f09f9d9932c2a933e0ac9434f09f9d9932c2a933e0ac9434f09f9d9932c2a933e0ac9434f09f9d9932c2a933e0ac9434f09f9d9932c2a933e0ac9434f09f9d9932c2a933e0ac9434f09f9d9932c2a933e0ac9434f09f9d9932c2a933e0ac9434f09f9d9932c2a9227dc9f05d991d0000000000c071f0d12b84c31f000000000000"
             ),
             navigable_conditions=NavigableConditions(
-                value=["Sign"],
+                value=["Error!"],
             ),
             expected_response=RAPDU(
-                SW_OK,
-                # signature
-                bytes.fromhex(
-                    "cf094450a6fb2d5028fadc44e540df92bbdc9144ef9716558af75fec77ee0ec05fb7f63aca69f90a8b3908365e4242905827734198bf830a60b4c7498df6d80c"
-                ),
+                ERR_NON_ASCII_CHARS,
+                bytes(),
             ),
         ),
     ]

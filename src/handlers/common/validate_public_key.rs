@@ -4,6 +4,7 @@ use ledger_device_sdk::ui::{
     gadgets::{Field, MultiFieldReview},
 };
 
+use crate::sign_ui::widgets::check_display_error;
 use crate::{
     utils::crypto::{public_key::NoSecpAllowed, PathBip32, PublicKeyBe},
     AppSW,
@@ -89,5 +90,5 @@ fn ui_display(info: &KeyMismatchInfo) -> Result<bool, AppSW> {
         Some(&CROSSMARK),
     );
 
-    Ok(my_review.show())
+    Ok(my_review.show().map_err(check_display_error)?)
 }

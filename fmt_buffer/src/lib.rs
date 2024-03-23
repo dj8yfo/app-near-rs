@@ -23,12 +23,6 @@ impl<const N: usize> Buffer<N> {
             if *byte < 0x20 {
                 *byte = 0x7f;
             }
-            // NOTE: this workaround is needed until https://github.com/LedgerHQ/ledger-device-rust-sdk/issues/124
-            // is handled at sdk level
-            if *byte > 0x7f {
-                // NOTE: this is a square glyph, of DEL display
-                *byte = 0x7f;
-            }
         }
         debug_assert!(self.used <= self.buffer.len());
         // .unwrap() is ok, as only bytes, comprising a sequence of valid utf8 chars
