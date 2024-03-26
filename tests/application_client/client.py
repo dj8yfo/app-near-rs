@@ -19,6 +19,7 @@ P1_CONFIRM = 0x00
 
 # Return codes
 SW_OK = 0x9000
+ERR_NON_ASCII_CHARS = 0xB00E
 
 FINISH_STUB_APDU = RAPDU(0xFFFF, bytes())
 

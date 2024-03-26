@@ -38,3 +38,6 @@ icon = "crab_14x14.gif"
 [features]
 default = []
 speculos = ["ledger_device_sdk/speculos"]
+
+[patch.crates-io]
+ledger_device_sdk = { git = "https://github.com/dj8yfo/ledger-device-rust-sdk.git", branch="multi_field_review_non_ascii_forbid"}

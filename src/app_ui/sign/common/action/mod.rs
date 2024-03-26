@@ -8,7 +8,7 @@ use fmt_buffer::Buffer;
 
 use ledger_device_sdk::ui::{
     bitmaps::{CROSSMARK, EYE, VALIDATE_14},
-    gadgets::MultiFieldReview,
+    gadgets::{DisplayError, MultiFieldReview},
 };
 use numtoa::NumToA;
 
@@ -26,7 +26,10 @@ mod function_call_str;
 mod stake;
 mod transfer;
 
-pub fn ui_display_transfer(transfer: &parsing::types::Transfer, params: ActionParams) -> bool {
+pub fn ui_display_transfer(
+    transfer: &parsing::types::Transfer,
+    params: ActionParams,
+) -> Result<bool, DisplayError> {
     let mut field_context: transfer::FieldsContext = transfer::FieldsContext::new();
     let mut writer: FieldsWriter<'_, 2> = FieldsWriter::new();
 
@@ -38,7 +41,7 @@ pub fn ui_display_transfer(transfer: &parsing::types::Transfer, params: ActionPa
 pub fn ui_display_create_account(
     create_account: &parsing::types::CreateAccount,
     params: ActionParams,
-) -> bool {
+) -> Result<bool, DisplayError> {
     let mut writer: FieldsWriter<'_, 1> = FieldsWriter::new();
 
     create_account::format(create_account, &mut writer);
@@ -49,7 +52,7 @@ pub fn ui_display_create_account(
 pub fn ui_display_delete_account(
     delete_account: &mut parsing::types::DeleteAccount,
     params: ActionParams,
-) -> bool {
+) -> Result<bool, DisplayError> {
     let mut writer: FieldsWriter<'_, 3> = FieldsWriter::new();
     let mut field_context: delete_account::FieldsContext = delete_account::FieldsContext::new();
 
@@ -58,7 +61,10 @@ pub fn ui_display_delete_account(
     ui_display_common(&mut writer, params)
 }
 
-pub fn ui_display_delete_key(delete_key: &parsing::types::DeleteKey, params: ActionParams) -> bool {
+pub fn ui_display_delete_key(
+    delete_key: &parsing::types::DeleteKey,
+    params: ActionParams,
+) -> Result<bool, DisplayError> {
     let mut field_context: tx_public_key_context::FieldsContext =
         tx_public_key_context::FieldsContext::new();
     let mut writer: FieldsWriter<'_, 2> = FieldsWriter::new();
@@ -68,7 +74,10 @@ pub fn ui_display_delete_key(delete_key: &parsing::types::DeleteKey, params: Act
     ui_display_common(&mut writer, params)
 }
 
-pub fn ui_display_stake(stake: &parsing::types::Stake, params: ActionParams) -> bool {
+pub fn ui_display_stake(
+    stake: &parsing::types::Stake,
+    params: ActionParams,
+) -> Result<bool, DisplayError> {
     let mut field_context: stake::FieldsContext = stake::FieldsContext::new();
     let mut writer: FieldsWriter<'_, 3> = FieldsWriter::new();
 
@@ -80,7 +89,7 @@ pub fn ui_display_stake(stake: &parsing::types::Stake, params: ActionParams) -> 
 pub fn ui_display_add_key_fullaccess(
     add_key: &parsing::types::AddKey,
     params: ActionParams,
-) -> bool {
+) -> Result<bool, DisplayError> {
     let mut field_context: add_key_common::FieldsContext = add_key_common::FieldsContext::new();
     let mut writer: FieldsWriter<'_, 4> = FieldsWriter::new();
 
@@ -93,7 +102,7 @@ pub fn ui_display_add_key_functioncall(
     add_key: &parsing::types::AddKey,
     function_call_per: &mut parsing::types::FunctionCallPermission,
     params: ActionParams,
-) -> bool {
+) -> Result<bool, DisplayError> {
     let mut common_field_context: add_key_common::FieldsContext =
         add_key_common::FieldsContext::new();
     let mut func_call_field_context: function_call_permission::FieldsContext =
@@ -114,7 +123,7 @@ pub fn ui_display_add_key_functioncall(
 pub fn ui_display_deploy_contract(
     deploy_contract: &parsing::types::DeployContract,
     params: ActionParams,
-) -> bool {
+) -> Result<bool, DisplayError> {
     let mut writer: FieldsWriter<'_, 2> = FieldsWriter::new();
 
     deploy_contract::format(deploy_contract, &mut writer);
@@ -126,7 +135,7 @@ pub fn ui_display_function_call_str(
     func_call_common: &mut parsing::types::FunctionCallCommon,
     args: &mut CappedString<200>,
     params: ActionParams,
-) -> bool {
+) -> Result<bool, DisplayError> {
     let mut writer: FieldsWriter<'_, 7> = FieldsWriter::new();
     let mut common_field_context: function_call_common::FieldsContext =
         function_call_common::FieldsContext::new();
@@ -143,7 +152,7 @@ pub fn ui_display_function_call_bin(
     func_call_common: &mut parsing::types::FunctionCallCommon,
     args: &HexDisplay<200>,
     params: ActionParams,
-) -> bool {
+) -> Result<bool, DisplayError> {
     let mut writer: FieldsWriter<'_, 7> = FieldsWriter::new();
     let mut common_field_context: function_call_common::FieldsContext =
         function_call_common::FieldsContext::new();
@@ -158,7 +167,7 @@ pub fn ui_display_function_call_bin(
 pub fn ui_display_common<const N: usize>(
     writer: &mut FieldsWriter<'_, N>,
     params: ActionParams,
-) -> bool {
+) -> Result<bool, DisplayError> {
     let mut ordinal_fmt_buf = Buffer::<25>::new();
     let is_last = ordinal_string(&mut ordinal_fmt_buf, params);
 

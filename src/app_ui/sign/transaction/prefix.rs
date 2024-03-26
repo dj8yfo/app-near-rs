@@ -1,6 +1,6 @@
 use ledger_device_sdk::ui::{
     bitmaps::{CROSSMARK, EYE, VALIDATE_14},
-    gadgets::{Field, MultiFieldReview},
+    gadgets::{DisplayError, Field, MultiFieldReview},
 };
 use numtoa::NumToA;
 
@@ -52,7 +52,9 @@ fn format<'b, 'a: 'b>(
         value: num_actions_str,
     }));
 }
-pub fn ui_display(prefix: &mut parsing::types::transaction::prefix::Prefix) -> bool {
+pub fn ui_display(
+    prefix: &mut parsing::types::transaction::prefix::Prefix,
+) -> Result<bool, DisplayError> {
     let mut field_writer: FieldsWriter<'_, 5> = FieldsWriter::new();
     let mut field_context: FieldsContext = FieldsContext::new();
     format(prefix, &mut field_context, &mut field_writer);

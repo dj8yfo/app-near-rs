@@ -1,5 +1,6 @@
 use crate::parsing::types::DeployContract;
 use crate::sign_ui;
+use crate::sign_ui::widgets::check_display_error;
 use crate::{
     parsing::{HashingStream, SingleTxStream},
     AppSW,
@@ -15,7 +16,9 @@ pub fn handle(
     let deploy_contract =
         DeployContract::deserialize_reader(stream).map_err(|_err| AppSW::TxParsingFail)?;
 
-    if !sign_ui::action::ui_display_deploy_contract(&deploy_contract, params) {
+    if !sign_ui::action::ui_display_deploy_contract(&deploy_contract, params)
+        .map_err(check_display_error)?
+    {
         return Err(AppSW::Deny);
     }
     Ok(())

@@ -1,4 +1,5 @@
 use crate::sign_ui;
+use crate::sign_ui::widgets::check_display_error;
 use crate::{
     parsing::{types::Transfer, HashingStream, SingleTxStream},
     AppSW,
@@ -13,7 +14,7 @@ pub fn handle(
 ) -> Result<(), AppSW> {
     let transfer = Transfer::deserialize_reader(stream).map_err(|_err| AppSW::TxParsingFail)?;
 
-    if !sign_ui::action::ui_display_transfer(&transfer, params) {
+    if !sign_ui::action::ui_display_transfer(&transfer, params).map_err(check_display_error)? {
         return Err(AppSW::Deny);
     }
     Ok(())

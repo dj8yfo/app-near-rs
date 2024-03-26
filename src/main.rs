@@ -160,6 +160,7 @@ pub enum AppSW {
     Bip32PathParsingFail = 0xB00B,
     TxHashFinalizeFail = 0xB00C,
     PublicKeyMismatch = 0xB00D,
+    NonASCIIChars = 0xB00E,
     WrongApduLength = StatusWords::BadLen as u16,
 }
 

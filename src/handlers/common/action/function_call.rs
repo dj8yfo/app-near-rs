@@ -1,5 +1,6 @@
 use crate::parsing::types::FunctionCallCommon;
 use crate::sign_ui;
+use crate::sign_ui::widgets::check_display_error;
 use crate::utils::types::capped_string::CappedString;
 use crate::utils::types::hex_display::HexDisplay;
 use crate::{
@@ -74,7 +75,9 @@ fn handle_common(
                 &mut func_call_common,
                 args_bin,
                 params,
-            ) {
+            )
+            .map_err(check_display_error)?
+            {
                 return Err(AppSW::Deny);
             }
         }
@@ -83,7 +86,9 @@ fn handle_common(
                 &mut func_call_common,
                 args_str,
                 params,
-            ) {
+            )
+            .map_err(check_display_error)?
+            {
                 return Err(AppSW::Deny);
             }
         }

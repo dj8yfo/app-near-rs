@@ -17,6 +17,7 @@
 use crate::parsing;
 use crate::parsing::{HashingStream, SingleTxStream};
 use crate::sign_ui;
+use crate::sign_ui::widgets::check_display_error;
 use crate::utils::crypto::public_key::NoSecpAllowed;
 use crate::utils::crypto::{self, PublicKeyBe};
 use crate::AppSW;
@@ -41,7 +42,7 @@ fn handle_transaction_prefix(
         .deserialize_reader_in_place(stream)
         .map_err(|_err| AppSW::TxParsingFail)?;
 
-    if !sign_ui::transaction::prefix::ui_display(&mut tx_prefix) {
+    if !sign_ui::transaction::prefix::ui_display(&mut tx_prefix).map_err(check_display_error)? {
         return Err(AppSW::Deny);
     }
     let tx_public_key = PublicKeyBe::try_from(tx_prefix.public_key);

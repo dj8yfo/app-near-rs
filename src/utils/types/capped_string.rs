@@ -29,12 +29,6 @@ impl<const N: usize> CappedString<N> {
                 // NOTE: this is a square glyph, of DEL display
                 *byte = 0x7f;
             }
-            // NOTE: this workaround is needed until https://github.com/LedgerHQ/ledger-device-rust-sdk/issues/124
-            // is handled at sdk level
-            if *byte > 0x7f {
-                // NOTE: this is a square glyph, of DEL display
-                *byte = 0x7f;
-            }
         }
         // .unwrap() is ok because it's either based on complete deserialized `str`
         // based on previous validation by `core::str::from_utf8`,

@@ -4,7 +4,7 @@ use crate::{
         types::{common::message_discriminant::NEP_366_META_TRANSACTIONS, MessageDiscriminant},
         HashingStream, SingleTxStream,
     },
-    sign_ui,
+    sign_ui::{self, widgets::check_display_error},
     utils::crypto::{self, public_key::NoSecpAllowed, PublicKeyBe},
     AppSW,
 };
@@ -62,7 +62,9 @@ fn handle_prefix(stream: &mut HashingStream<SingleTxStream<'_>>) -> Result<u32, 
         .deserialize_reader_in_place(stream)
         .map_err(|_err| AppSW::TxParsingFail)?;
 
-    if !sign_ui::nep366_delegate_action::prefix::ui_display(&mut delegate_action_prefix) {
+    if !sign_ui::nep366_delegate_action::prefix::ui_display(&mut delegate_action_prefix)
+        .map_err(check_display_error)?
+    {
         return Err(AppSW::Deny);
     }
     Ok(delegate_action_prefix.number_of_actions)
@@ -73,7 +75,9 @@ fn handle_suffix(stream: &mut HashingStream<SingleTxStream<'_>>) -> Result<Suffi
         parsing::types::nep366_delegate_action::suffix::Suffix::deserialize_reader(stream)
             .map_err(|_err| AppSW::TxParsingFail)?;
 
-    if !sign_ui::nep366_delegate_action::suffix::ui_display(&delegate_action_suffix) {
+    if !sign_ui::nep366_delegate_action::suffix::ui_display(&delegate_action_suffix)
+        .map_err(check_display_error)?
+    {
         return Err(AppSW::Deny);
     }
     let tx_public_key = PublicKeyBe::try_from(delegate_action_suffix.public_key);

@@ -1,4 +1,5 @@
 use crate::sign_ui;
+use crate::sign_ui::widgets::check_display_error;
 use crate::{
     parsing::{types::DeleteKey, HashingStream, SingleTxStream},
     AppSW,
@@ -13,7 +14,7 @@ pub fn handle(
 ) -> Result<(), AppSW> {
     let delete_key = DeleteKey::deserialize_reader(stream).map_err(|_err| AppSW::TxParsingFail)?;
 
-    if !sign_ui::action::ui_display_delete_key(&delete_key, params) {
+    if !sign_ui::action::ui_display_delete_key(&delete_key, params).map_err(check_display_error)? {
         return Err(AppSW::Deny);
     }
     Ok(())
