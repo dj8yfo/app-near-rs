@@ -42,7 +42,7 @@ pub fn ui_display_pk_base58(public_key: &crypto::PublicKeyBe) -> Result<bool, Ap
         Some(&CROSSMARK),
     );
 
-    Ok(my_review.show().map_err(check_display_error)?)
+    my_review.show().map_err(check_display_error)
 }
 
 pub fn ui_display_hex(public_key: &crypto::PublicKeyBe) -> Result<bool, AppSW> {
@@ -63,5 +63,5 @@ pub fn ui_display_hex(public_key: &crypto::PublicKeyBe) -> Result<bool, AppSW> {
         Some(&CROSSMARK),
     );
 
-    Ok(my_review.show().map_err(check_display_error)?)
+    my_review.show().map_err(check_display_error)
 }

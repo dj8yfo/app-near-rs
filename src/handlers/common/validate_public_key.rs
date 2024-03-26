@@ -90,5 +90,5 @@ fn ui_display(info: &KeyMismatchInfo) -> Result<bool, AppSW> {
         Some(&CROSSMARK),
     );
 
-    Ok(my_review.show().map_err(check_display_error)?)
+    my_review.show().map_err(check_display_error)
 }
